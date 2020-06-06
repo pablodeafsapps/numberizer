@@ -12,6 +12,7 @@
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 /.idea/encodings.xml
+/.idea/jarRepositories.xml
 .DS_Store
 /build
 /captures
