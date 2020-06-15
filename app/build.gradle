@@ -6,7 +6,7 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion compilesdk_version
     defaultConfig {
-        applicationId "org.deafsapps.android.mobilityfinder"
+        applicationId "com.raywenderlich.numberizer"
         minSdkVersion minsdk_version
         targetSdkVersion targetsdk_version
         multiDexEnabled true

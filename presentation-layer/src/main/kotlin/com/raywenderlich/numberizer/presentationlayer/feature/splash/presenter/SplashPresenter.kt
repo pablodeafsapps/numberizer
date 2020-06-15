@@ -36,6 +36,7 @@ class SplashPresenter(private var view: SplashContract.View?) : SplashContract.P
     }
 
     override fun onViewResumed() {
+        view?.navigateToMain()
         view?.finishView()
     }
 

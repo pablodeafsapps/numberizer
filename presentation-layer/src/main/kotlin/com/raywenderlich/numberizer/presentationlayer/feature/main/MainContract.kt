@@ -21,18 +21,23 @@
  */
 package com.raywenderlich.numberizer.presentationlayer.feature.main
 
+import com.raywenderlich.numberizer.domainlayer.domain.Failure
+import com.raywenderlich.numberizer.domainlayer.domain.NumberFactResponse
 import com.raywenderlich.numberizer.presentationlayer.base.MvpPresenter
 import com.raywenderlich.numberizer.presentationlayer.base.MvpView
 
 interface MainContract {
 
     interface View : MvpView {
-        fun navigateToMain()
-        fun finishView()
+        fun displayNumberFact(numberFact: NumberFactResponse)
+        fun displayError(error: Failure)
+        fun displayInputError(error: Failure)
+        fun showLoading()
+        fun hideLoading()
     }
 
     interface Presenter : MvpPresenter<View> {
-        fun onViewResumed()
+        fun onFetchFactSelected(data: String)
     }
 
 }

@@ -22,14 +22,54 @@
 package com.raywenderlich.numberizer.presentationlayer.feature.main.view.ui
 
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.raywenderlich.numberizer.presentationlayer.R
+import com.raywenderlich.numberizer.domainlayer.domain.Failure
+import com.raywenderlich.numberizer.domainlayer.domain.NumberFactResponse
+import com.raywenderlich.numberizer.presentationlayer.databinding.ActivityMainBinding
+import com.raywenderlich.numberizer.presentationlayer.feature.main.MainContract
+import com.raywenderlich.numberizer.presentationlayer.feature.main.presenter.MainPresenter
+import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainContract.View {
+
+    private lateinit var viewBinding: ActivityMainBinding
+    private val presenter: MainContract.Presenter by lazy { MainPresenter(view = this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        viewBinding = ActivityMainBinding.inflate(layoutInflater)
+        initView()
+        setContentView(viewBinding.root)
+    }
+
+    private fun initView() {
+        with(viewBinding) {
+            btnFetchFact.setOnClickListener {
+                presenter.onFetchFactSelected(data = etNumber.text.toString())
+            }
+        }
+    }
+
+    override fun displayNumberFact(numberFact: NumberFactResponse) {
+        viewBinding.tvNumberFact.text = numberFact.fact
+    }
+
+    override fun displayError(error: Failure) {
+        Toast.makeText(this, error.msg, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun displayInputError(error: Failure) {
+        viewBinding.etNumber.error = error.msg
+    }
+
+    override fun showLoading() {
+        viewBinding.pbLoading.visibility = View.VISIBLE
+    }
+
+    override fun hideLoading() {
+        viewBinding.pbLoading.visibility = View.INVISIBLE
     }
 
 }

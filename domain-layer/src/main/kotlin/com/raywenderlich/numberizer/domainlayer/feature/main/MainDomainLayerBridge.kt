@@ -33,6 +33,7 @@ interface MainDomainLayerBridge {
 
     fun fetchNumberFact(
         scope: CoroutineScope,
+        params: NumberFactRequest,
         onResult: (Either<Failure, NumberFactResponse>) -> Unit = {}
     )
 
@@ -45,9 +46,10 @@ class MainDomainLayerBridgeImpl : MainDomainLayerBridge {
 
     override fun fetchNumberFact(
         scope: CoroutineScope,
+        params: NumberFactRequest,
         onResult: (Either<Failure, NumberFactResponse>) -> Unit
     ) {
-        fetchNumberFactUc.invoke(scope = scope, params = null, onResult = onResult)
+        fetchNumberFactUc.invoke(scope = scope, params = params, onResult = onResult)
     }
 
 }

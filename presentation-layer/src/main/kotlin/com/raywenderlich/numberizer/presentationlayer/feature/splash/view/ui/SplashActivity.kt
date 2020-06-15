@@ -33,7 +33,6 @@ class SplashActivity : AppCompatActivity(), SplashContract.View {
 
     private val presenter: SplashContract.Presenter by lazy { SplashPresenter(view = this) }
 
-
     override fun onResume() {
         super.onResume()
         presenter.onViewResumed()
