@@ -1,2 +1,10 @@
 <resources>
+    <string name="text_hint_number">number…</string>
+    <string name="text_get_number_fact">Get number fact</string>
+    <string-array name="number_fact_type">
+        <item>trivia</item>
+        <item>math</item>
+        <item>date</item>
+        <item>year</item>
+    </string-array>
 </resources>
