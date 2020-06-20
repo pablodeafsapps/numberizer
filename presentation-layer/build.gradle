@@ -3,6 +3,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+// dagger graph visualizer
+apply plugin: 'scabbard.gradle'
 
 android {
     compileSdkVersion compilesdk_version
@@ -37,6 +39,10 @@ androidExtensions {
     experimental = true
 }
 
+scabbard {
+    enabled true
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -44,6 +50,8 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$androidxconstraintlayout_version"
     // other modules
     implementation project(':domain-layer')
+    // 3rd party libraries
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
     // testing dependencies - Unit Test
     testImplementation "junit:junit:$junit_version"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$nhaarmanmockito_version"

@@ -26,11 +26,21 @@ import com.raywenderlich.numberizer.presentationlayer.base.MvpView
 interface SplashContract {
 
     interface View : MvpView {
+
+        companion object {
+            const val SPLASH_VIEW_TAG = "splashView"
+        }
+
         fun navigateToMain()
         fun finishView()
     }
 
     interface Presenter {
+
+        companion object {
+            const val SPLASH_PRESENTER_TAG = "splashPresenter"
+        }
+
         fun onAttach(mvpView: View)
         fun onDetach()
         fun onViewResumed()

@@ -9,7 +9,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".feature.splash.view.ui.SplashActivity">
+        <activity
+            android:name=".feature.splash.view.ui.SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

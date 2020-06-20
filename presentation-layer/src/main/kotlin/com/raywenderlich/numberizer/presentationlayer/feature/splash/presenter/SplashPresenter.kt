@@ -22,10 +22,13 @@
 package com.raywenderlich.numberizer.presentationlayer.feature.splash.presenter
 
 import com.raywenderlich.numberizer.presentationlayer.feature.splash.SplashContract
+import com.raywenderlich.numberizer.presentationlayer.feature.splash.SplashContract.View.Companion.SPLASH_VIEW_TAG
+import javax.inject.Inject
+import javax.inject.Named
 
-const val SPLASH_PRESENTER_TAG = "splashPresenter"
-
-class SplashPresenter(private var view: SplashContract.View?) : SplashContract.Presenter {
+class SplashPresenter @Inject constructor(
+    @Named(SPLASH_VIEW_TAG) private var view: SplashContract.View?
+) : SplashContract.Presenter {
 
     override fun onAttach(mvpView: SplashContract.View) {
         // no need to implement it since view injection is handled by Dagger

@@ -34,7 +34,7 @@ import java.net.SocketTimeoutException
 
 object NumberDataRepository : DomainlayerContract.Data.DataRepository<NumberFactResponse> {
 
-    private val numberFactDataSource: NumberFactDataSource by lazy { NumbersApiDataSource() }
+    lateinit var numberFactDataSource: NumberFactDataSource
 
     @Throws(SocketTimeoutException::class)
     override suspend fun fetchNumberFact(request: NumberFactRequest): Either<Failure, NumberFactResponse> =

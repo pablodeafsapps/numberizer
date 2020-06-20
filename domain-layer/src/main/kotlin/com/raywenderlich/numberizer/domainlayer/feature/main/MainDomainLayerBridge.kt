@@ -26,8 +26,13 @@ import com.raywenderlich.numberizer.domainlayer.DomainlayerContract
 import com.raywenderlich.numberizer.domainlayer.domain.Failure
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactRequest
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactResponse
+import com.raywenderlich.numberizer.domainlayer.usecase.FETCH_NUMBER_FACT_UC_TAG
 import com.raywenderlich.numberizer.domainlayer.usecase.FetchNumberFactUc
 import kotlinx.coroutines.CoroutineScope
+import javax.inject.Inject
+import javax.inject.Named
+
+const val MAIN_DOMAIN_LAYER_BRIDGE_TAG = "mainDomainLayerBridge"
 
 interface MainDomainLayerBridge {
 
@@ -39,10 +44,11 @@ interface MainDomainLayerBridge {
 
 }
 
-class MainDomainLayerBridgeImpl : MainDomainLayerBridge {
-
-    private val fetchNumberFactUc: DomainlayerContract.Presentation.UseCase<NumberFactRequest, NumberFactResponse>
-            by lazy { FetchNumberFactUc() }
+class MainDomainLayerBridgeImpl @Inject constructor(
+//    @Named(FETCH_NUMBER_FACT_UC_TAG)
+//    private val fetchNumberFactUc: DomainlayerContract.Presentation.UseCase<NumberFactRequest, NumberFactResponse>
+    private val fetchNumberFactUc: FetchNumberFactUc
+) : MainDomainLayerBridge {
 
     override fun fetchNumberFact(
         scope: CoroutineScope,
