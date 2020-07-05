@@ -32,16 +32,17 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 interface NumberFactDataSource {
 
     companion object {
-        const val BASE_URL = "http//numbersapi.com"
+        const val BASE_URL = "http://numbersapi.com"
         const val NUMBER_FACT_DATA_SOURCE_TAG = "numberFactDataSource"
     }
 
-    suspend fun fetchNumberFact(request: NumberFactRequest): Response<NumberFactResponse>
+    suspend fun fetchNumberFact(request: NumberFactRequest): Response<String>
 
 }
 
@@ -49,9 +50,12 @@ class NumbersApiDataSource : NumberFactDataSource {
 
     private val retrofit: Retrofit by lazy { getRetrofitInstance() }
 
-    override suspend fun fetchNumberFact(request: NumberFactRequest): Response<NumberFactResponse> =
+    override suspend fun fetchNumberFact(request: NumberFactRequest): Response<String> =
         retrofit.create(NumbersApiService::class.java)
-            .getNumberFactAsync(number = request.number.toString())
+            .getNumberFactAsync(
+                number = request.number.toString(),
+                category = request.category.toString().toLowerCase(Locale.ROOT)
+            )
 
 }
 

@@ -22,6 +22,7 @@
 package com.raywenderlich.numberizer.presentationlayer.feature.main
 
 import com.raywenderlich.numberizer.domainlayer.domain.Failure
+import com.raywenderlich.numberizer.domainlayer.domain.NumberFactCategory
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactResponse
 import com.raywenderlich.numberizer.presentationlayer.base.MvpPresenter
 import com.raywenderlich.numberizer.presentationlayer.base.MvpView
@@ -37,7 +38,7 @@ interface MainContract {
     }
 
     interface Presenter : MvpPresenter<View> {
-        fun onFetchFactSelected(data: String)
+        fun onFetchFactSelected(data: String, category: NumberFactCategory)
     }
 
 }

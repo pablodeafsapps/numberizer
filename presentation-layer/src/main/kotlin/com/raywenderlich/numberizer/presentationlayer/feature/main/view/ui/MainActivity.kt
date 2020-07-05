@@ -21,18 +21,22 @@
  */
 package com.raywenderlich.numberizer.presentationlayer.feature.main.view.ui
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.raywenderlich.numberizer.domainlayer.domain.Failure
+import com.raywenderlich.numberizer.domainlayer.domain.NumberFactCategory
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactResponse
 import com.raywenderlich.numberizer.presentationlayer.databinding.ActivityMainBinding
 import com.raywenderlich.numberizer.presentationlayer.feature.main.MainContract
 import com.raywenderlich.numberizer.presentationlayer.feature.main.presenter.MainPresenter
-import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), MainContract.View {
+private const val EMPTY_STRING = ""
+const val MAIN_VIEW_TAG = "mainView"
+
+class MainActivity : Activity(), MainContract.View {
 
     private lateinit var viewBinding: ActivityMainBinding
     private val presenter: MainContract.Presenter by lazy { MainPresenter(view = this) }
@@ -46,17 +50,25 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
     private fun initView() {
         with(viewBinding) {
+            spFactType.adapter = ArrayAdapter(this@MainActivity, android.R.layout.simple_spinner_item, NumberFactCategory.values())
             btnFetchFact.setOnClickListener {
-                presenter.onFetchFactSelected(data = etNumber.text.toString())
+                presenter.onFetchFactSelected(
+                    data = etNumber.text.toString(),
+                    category = NumberFactCategory.valueOf(spFactType.selectedItem.toString())
+                )
             }
         }
     }
 
     override fun displayNumberFact(numberFact: NumberFactResponse) {
-        viewBinding.tvNumberFact.text = numberFact.fact
+        with(viewBinding) {
+            etNumber.setText(EMPTY_STRING)
+            tvNumberFact.text = numberFact.fact
+        }
     }
 
     override fun displayError(error: Failure) {
+        viewBinding.etNumber.setText(EMPTY_STRING)
         Toast.makeText(this, error.msg, Toast.LENGTH_SHORT).show()
     }
 
@@ -65,7 +77,10 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     }
 
     override fun showLoading() {
-        viewBinding.pbLoading.visibility = View.VISIBLE
+        with (viewBinding) {
+            tvNumberFact.text = EMPTY_STRING
+            pbLoading.visibility = View.VISIBLE
+        }
     }
 
     override fun hideLoading() {

@@ -21,15 +21,15 @@
  */
 package com.raywenderlich.numberizer.presentationlayer.feature.splash.view.ui
 
+import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import com.raywenderlich.numberizer.presentationlayer.feature.main.view.ui.MainActivity
 import com.raywenderlich.numberizer.presentationlayer.feature.splash.SplashContract
 import com.raywenderlich.numberizer.presentationlayer.feature.splash.presenter.SplashPresenter
 
 const val SPLASH_VIEW_TAG = "splashView"
 
-class SplashActivity : AppCompatActivity(), SplashContract.View {
+class SplashActivity : Activity(), SplashContract.View {
 
     private val presenter: SplashContract.Presenter by lazy { SplashPresenter(view = this) }
 

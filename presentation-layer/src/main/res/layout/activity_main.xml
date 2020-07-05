@@ -49,8 +49,8 @@
         android:id="@+id/etNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/text_hint_number"
         android:ems="10"
+        android:hint="@string/text_hint_number"
         android:inputType="number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,10 +62,10 @@
         android:id="@+id/spFactType"
         android:layout_width="@dimen/fully_stretchable"
         android:layout_height="wrap_content"
-        android:entries="@array/number_fact_type"
         android:layout_marginTop="@dimen/default_margin"
         app:layout_constraintEnd_toEndOf="@id/etNumber"
         app:layout_constraintStart_toStartOf="@id/etNumber"
-        app:layout_constraintTop_toBottomOf="@id/etNumber" />
+        app:layout_constraintTop_toBottomOf="@id/etNumber"
+        tools:entries="@array/number_fact_type" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

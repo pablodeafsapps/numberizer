@@ -21,11 +21,12 @@
  */
 package com.raywenderlich.numberizer.presentationlayer.feature.main.presenter
 
+import com.raywenderlich.numberizer.domainlayer.DomainlayerContract
 import com.raywenderlich.numberizer.domainlayer.domain.Failure
+import com.raywenderlich.numberizer.domainlayer.domain.NumberFactCategory
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactRequest
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactResponse
-import com.raywenderlich.numberizer.domainlayer.feature.main.MainDomainLayerBridge
-import com.raywenderlich.numberizer.domainlayer.feature.main.MainDomainLayerBridgeImpl
+import com.raywenderlich.numberizer.domainlayer.usecase.FetchNumberFactUc
 import com.raywenderlich.numberizer.presentationlayer.feature.main.MainContract
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -39,7 +40,7 @@ class MainPresenter(private var view: MainContract.View?) : MainContract.Present
     private val job = Job()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.IO
-    private val bridge: MainDomainLayerBridge by lazy { MainDomainLayerBridgeImpl() }
+    private val fetchNumberFactUc: DomainlayerContract.Presentation.UseCase<NumberFactRequest, NumberFactResponse> by lazy { FetchNumberFactUc() }
 
     override fun onAttach(mvpView: MainContract.View) {
         // no need to implement it since view injection is handled by Dagger
@@ -49,12 +50,12 @@ class MainPresenter(private var view: MainContract.View?) : MainContract.Present
         view = null
     }
 
-    override fun onFetchFactSelected(data: String) {
+    override fun onFetchFactSelected(data: String, category: NumberFactCategory) {
         if (data.isNotBlank()) {
             view?.showLoading()
             try {
-                val request = NumberFactRequest(number = data.toInt())
-                bridge.fetchNumberFact(scope = this, params = request, onResult = {
+                val request = NumberFactRequest(number = data.toInt(), category = category)
+                fetchNumberFactUc.invoke(scope = this, params = request, onResult = {
                     view?.hideLoading()
                     it.fold(::handleError, ::handleFetchNumberFactSuccess)
                 })
