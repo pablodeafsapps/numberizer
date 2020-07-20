@@ -21,23 +21,32 @@
  */
 package com.raywenderlich.numberizer.presentationlayer.feature.main.presenter
 
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import arrow.core.Either
+import arrow.core.right
+import com.nhaarman.mockitokotlin2.*
+import com.raywenderlich.numberizer.domainlayer.domain.Failure
+import com.raywenderlich.numberizer.domainlayer.domain.NumberFactRequest
+import com.raywenderlich.numberizer.domainlayer.domain.NumberFactResponse
+import com.raywenderlich.numberizer.domainlayer.feature.main.MainDomainLayerBridge
 import com.raywenderlich.numberizer.presentationlayer.feature.main.MainContract
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
+private const val DEFAULT_INTEGER_VALUE = -1
+private const val DEFAULT_STRING_VALUE = "none"
+
 class MainPresenterTest {
 
     private lateinit var mainPresenter: MainPresenter
     private lateinit var mockView: MainContract.View
+    private lateinit var mockBridge: MainDomainLayerBridge
 
     @Before
     fun setUp() {
         mockView = mock()
-        mainPresenter = MainPresenter(view = mockView)
+        mockBridge = mock()
+        mainPresenter = MainPresenter(view = mockView, bridge = mockBridge)
     }
 
     @After
@@ -68,11 +77,26 @@ class MainPresenterTest {
     @Test
     fun `Given data, when 'onFetchFactSelected' is invoked -- 'displayNumberFact' is triggered`() {
         // given
-        val blankDdata = "3"
+        val requestData = "3"
+        val argumentCaptor = argumentCaptor<(Either<Failure, NumberFactResponse>) -> Unit>()
         // when
-        mainPresenter.onFetchFactSelected(data = blankDdata)
+        mainPresenter.onFetchFactSelected(data = requestData)
+        verify(mockBridge).fetchNumberFact(scope = any(), params = any(), onResult = argumentCaptor.capture())
+        argumentCaptor.firstValue.invoke(getDummyNumberFactResponse().right())
         // then
         verify(mockView).displayNumberFact(numberFact = any())
     }
+
+    @Test
+    fun `Given unformattable data, when 'onFetchFactSelected' is invoked -- 'displayInputError' is triggered`() {
+        // given
+        val requestData = "none"
+        // when
+        mainPresenter.onFetchFactSelected(data = requestData)
+        // then
+        verify(mockView).displayInputError(error = any())
+    }
+
+    private fun getDummyNumberFactResponse() = NumberFactResponse(fact = DEFAULT_STRING_VALUE)
 
 }

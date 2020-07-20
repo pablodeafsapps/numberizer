@@ -29,6 +29,11 @@ import com.raywenderlich.numberizer.presentationlayer.base.MvpView
 interface MainContract {
 
     interface View : MvpView {
+
+        companion object {
+            const val MAIN_VIEW_TAG = "mainView"
+        }
+
         fun displayNumberFact(numberFact: NumberFactResponse)
         fun displayError(error: Failure)
         fun displayInputError(error: Failure)
@@ -37,6 +42,11 @@ interface MainContract {
     }
 
     interface Presenter : MvpPresenter<View> {
+
+        companion object {
+            const val MAIN_PRESENTER_TAG = "mainPresenter"
+        }
+
         fun onFetchFactSelected(data: String)
     }
 

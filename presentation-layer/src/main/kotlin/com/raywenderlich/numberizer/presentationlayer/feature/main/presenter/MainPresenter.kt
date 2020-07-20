@@ -24,42 +24,44 @@ package com.raywenderlich.numberizer.presentationlayer.feature.main.presenter
 import com.raywenderlich.numberizer.domainlayer.domain.Failure
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactRequest
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactResponse
+import com.raywenderlich.numberizer.domainlayer.feature.main.MAIN_DOMAIN_LAYER_BRIDGE_TAG
 import com.raywenderlich.numberizer.domainlayer.feature.main.MainDomainLayerBridge
-import com.raywenderlich.numberizer.domainlayer.feature.main.MainDomainLayerBridgeImpl
 import com.raywenderlich.numberizer.presentationlayer.feature.main.MainContract
+import com.raywenderlich.numberizer.presentationlayer.feature.main.MainContract.View.Companion.MAIN_VIEW_TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import java.lang.NumberFormatException
+import javax.inject.Inject
+import javax.inject.Named
 import kotlin.coroutines.CoroutineContext
 
-const val MAIN_PRESENTER_TAG = "mainPresenter"
-
-class MainPresenter(private var view: MainContract.View?) : MainContract.Presenter {
+class MainPresenter @Inject constructor(
+    @Named(MAIN_VIEW_TAG) private val view: MainContract.View,
+    @Named(MAIN_DOMAIN_LAYER_BRIDGE_TAG) private val bridge: MainDomainLayerBridge
+) : MainContract.Presenter {
 
     private val job = Job()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.IO
-    private val bridge: MainDomainLayerBridge by lazy { MainDomainLayerBridgeImpl() }
 
     override fun onAttach(mvpView: MainContract.View) {
         // no need to implement it since view injection is handled by Dagger
     }
 
     override fun onDetach() {
-        view = null
+        job.cancel()
     }
 
     override fun onFetchFactSelected(data: String) {
         if (data.isNotBlank()) {
-            view?.showLoading()
+            view.showLoading()
             try {
                 val request = NumberFactRequest(number = data.toInt())
                 bridge.fetchNumberFact(scope = this, params = request, onResult = {
-                    view?.hideLoading()
+                    view.hideLoading()
                     it.fold(::handleError, ::handleFetchNumberFactSuccess)
                 })
             } catch (e: NumberFormatException) {
-                view?.hideLoading()
+                view.hideLoading()
                 handleInputError(failure = Failure.InputParamsError("Parameter must be a number"))
             }
         } else {
@@ -68,15 +70,15 @@ class MainPresenter(private var view: MainContract.View?) : MainContract.Present
     }
 
     private fun handleFetchNumberFactSuccess(response: NumberFactResponse) {
-        view?.displayNumberFact(numberFact = response)
+        view.displayNumberFact(numberFact = response)
     }
 
     private fun handleError(failure: Failure) {
-        view?.displayError(error = failure)
+        view.displayError(error = failure)
     }
 
     private fun handleInputError(failure: Failure) {
-        view?.displayInputError(error = failure)
+        view.displayInputError(error = failure)
     }
 
 }

@@ -24,23 +24,23 @@ package com.raywenderlich.numberizer.domainlayer.usecase
 import arrow.core.Either
 import arrow.core.left
 import com.raywenderlich.numberizer.domainlayer.DomainlayerContract
+import com.raywenderlich.numberizer.domainlayer.DomainlayerContract.Data.Companion.DATA_REPOSITORY_TAG
 import com.raywenderlich.numberizer.domainlayer.domain.Failure
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactRequest
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactResponse
+import javax.inject.Inject
+import javax.inject.Named
 
 const val FETCH_NUMBER_FACT_UC_TAG = "fetchNumberFactUc"
 
-class FetchNumberFactUc : DomainlayerContract.Presentation.UseCase<NumberFactRequest, NumberFactResponse> {
-
-    private lateinit var numberDataRepository: DomainlayerContract.Data.DataRepository<NumberFactResponse>
+class FetchNumberFactUc @Inject constructor(
+    @Named(DATA_REPOSITORY_TAG)
+    private val numberDataRepository: @JvmSuppressWildcards DomainlayerContract.Data.DataRepository<NumberFactResponse>
+) : DomainlayerContract.Presentation.UseCase<NumberFactRequest, NumberFactResponse> {
 
     override suspend fun run(params: NumberFactRequest?): Either<Failure, NumberFactResponse> =
         params?.let {
-            if (::numberDataRepository.isInitialized) {
-                numberDataRepository.fetchNumberFact(request = params)
-            } else {
-                Failure.Unknown().left()
-            }
+            numberDataRepository.fetchNumberFact(request = params)
         } ?: run {
             Failure.InputParamsError().left()
         }
