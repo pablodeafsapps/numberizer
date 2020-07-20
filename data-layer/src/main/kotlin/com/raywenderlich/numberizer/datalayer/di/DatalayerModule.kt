@@ -9,40 +9,26 @@ import com.raywenderlich.numberizer.datalayer.repository.NumberDataRepository
 import com.raywenderlich.numberizer.domainlayer.DomainlayerContract
 import com.raywenderlich.numberizer.domainlayer.DomainlayerContract.Data.Companion.DATA_REPOSITORY_TAG
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactResponse
-import dagger.Component
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
-import javax.inject.Singleton
 
-@Component(modules = [RepositoryModule::class, DatasourceModule::class])
-interface DatalayerComponent {
-
-    @Component.Factory
-    interface Factory {
-        fun create(): DatalayerComponent
-    }
-
-    // downstream dependent components need data types to be exposed
-//    @Named(DATA_REPOSITORY_TAG)
-    fun dataRepository(): DomainlayerContract.Data.DataRepository<NumberFactResponse>
-
-}
+private const val TEN = 10L
 
 @Module
 object RepositoryModule {
 
     @Provides
-//    @Named(DATA_REPOSITORY_TAG)
+    @Named(DATA_REPOSITORY_TAG)
     fun provideDataRepository(
         @Named(NUMBER_FACT_DATA_SOURCE_TAG)
         numberFactDs: NumberFactDataSource
-    ): DomainlayerContract.Data.DataRepository<NumberFactResponse> =
+    ): @JvmSuppressWildcards DomainlayerContract.Data.DataRepository<NumberFactResponse> =
         NumberDataRepository.apply { numberFactDataSource = numberFactDs }
 
 }
@@ -55,11 +41,11 @@ class DatasourceModule {
     fun provideNumberFactDataSource(ds: NumbersApiDataSource): NumberFactDataSource = ds
 
     @Provides
-    fun provideRetrofitInstance() = Retrofit.Builder()
+    fun provideRetrofitInstance(): Retrofit = Retrofit.Builder()
         .client(getHttpClient())
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(ScalarsConverterFactory.create())
         .addCallAdapterFactory(CoroutineCallAdapterFactory())
-        .baseUrl("${NumberFactDataSource.BASE_URL}/")
+        .baseUrl(NumberFactDataSource.BASE_URL)
         .build()
 
 }
@@ -73,7 +59,7 @@ fun getHttpClient(): OkHttpClient {
     }
     return OkHttpClient.Builder()
         .addInterceptor(interceptor)
-        .connectTimeout(10, TimeUnit.SECONDS)
-        .readTimeout(10, TimeUnit.SECONDS)
+        .connectTimeout(TEN, TimeUnit.SECONDS)
+        .readTimeout(TEN, TimeUnit.SECONDS)
         .build()
 }

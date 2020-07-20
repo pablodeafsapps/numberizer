@@ -25,7 +25,6 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.raywenderlich.numberizer.datalayer.datasource.NumberFactDataSource
-import com.raywenderlich.numberizer.datalayer.datasource.NumbersApiDataSource
 import com.raywenderlich.numberizer.domainlayer.DomainlayerContract
 import com.raywenderlich.numberizer.domainlayer.domain.Failure
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactRequest
@@ -42,8 +41,9 @@ object NumberDataRepository : DomainlayerContract.Data.DataRepository<NumberFact
             val response = numberFactDataSource.fetchNumberFact(request = request)
 
             val body = response.body()
-            body.takeIf { response.isSuccessful && it != null }
-                ?.right() ?: run { Failure.NoData().left() }
+            body.takeIf { response.isSuccessful && it != null }?.let { f ->
+                NumberFactResponse(fact = f)
+            } ?.right() ?: run { Failure.NoData().left() }
         } catch (e: Exception) {
             Failure.ServerError(e.localizedMessage ?: "Server error").left()
         }

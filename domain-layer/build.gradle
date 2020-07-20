@@ -2,8 +2,6 @@ apply plugin: 'com.android.library'
 
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-// dagger graph visualizer
-apply plugin: 'scabbard.gradle'
 
 android {
     compileSdkVersion compilesdk_version
@@ -29,10 +27,6 @@ android {
     }
 }
 
-scabbard {
-    enabled true
-}
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -42,6 +36,7 @@ dependencies {
     api "io.arrow-kt:arrow-core:$arrow_version"
     api "io.arrow-kt:arrow-syntax:$arrow_version"
     kapt "io.arrow-kt:arrow-meta:$arrow_version"
+    api "com.squareup.retrofit2:retrofit:$retrofit_version"
     api "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     // testing dependencies - Unit Test

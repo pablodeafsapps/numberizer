@@ -3,8 +3,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-// dagger graph visualizer
-apply plugin: 'scabbard.gradle'
 
 android {
     compileSdkVersion compilesdk_version
@@ -37,10 +35,6 @@ android {
 
 androidExtensions {
     experimental = true
-}
-
-scabbard {
-    enabled true
 }
 
 dependencies {

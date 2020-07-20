@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 // dagger graph visualizer
-apply plugin: 'scabbard.gradle'
+//apply plugin: 'scabbard.gradle'
 
 android {
     compileSdkVersion compilesdk_version
@@ -31,9 +31,9 @@ android {
     }
 }
 
-scabbard {
-    enabled true
-}
+//scabbard {
+//    enabled true
+//}
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')

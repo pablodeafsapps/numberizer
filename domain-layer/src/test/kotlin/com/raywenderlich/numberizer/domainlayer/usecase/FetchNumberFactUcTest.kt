@@ -22,10 +22,8 @@
 package com.raywenderlich.numberizer.domainlayer.usecase
 
 import arrow.core.Either
-import arrow.core.left
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import arrow.core.right
+import com.nhaarman.mockitokotlin2.*
 import com.raywenderlich.numberizer.domainlayer.DomainlayerContract
 import com.raywenderlich.numberizer.domainlayer.domain.Failure
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactRequest
@@ -38,6 +36,7 @@ import org.junit.Before
 import org.junit.Test
 
 private const val DEFAULT_INTEGER_VALUE = -1
+private const val DEFAULT_STRING_VALUE = "none"
 
 @ExperimentalCoroutinesApi
 class FetchNumberFactUcTest {
@@ -48,7 +47,7 @@ class FetchNumberFactUcTest {
     @Before
     fun setUp() {
         mockRepository = mock()
-        usecase = FetchNumberFactUc()
+        usecase = FetchNumberFactUc(numberDataRepository = mockRepository)
     }
 
     @After
@@ -70,10 +69,13 @@ class FetchNumberFactUcTest {
     fun `Given right parameters, when usecase is invoked -- 'NumberFactResponse' data is returned`() = runBlockingTest {
         // given
         val rightParams = NumberFactRequest(number = DEFAULT_INTEGER_VALUE)
+        whenever(mockRepository.fetchNumberFact(request = rightParams)).doReturn(getDummyNumberFactResponse().right())
         // when
         val response = usecase.run(params = rightParams)
         // then
         Assert.assertTrue(response.isRight() && (response as? Either.Right<NumberFactResponse>) != null)
     }
+
+    private fun getDummyNumberFactResponse() = NumberFactResponse(fact = DEFAULT_STRING_VALUE)
 
 }

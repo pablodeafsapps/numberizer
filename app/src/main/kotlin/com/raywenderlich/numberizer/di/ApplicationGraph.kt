@@ -1,29 +1,28 @@
 package com.raywenderlich.numberizer.di
 
 import android.content.Context
-import com.raywenderlich.numberizer.datalayer.di.DatalayerComponent
-import com.raywenderlich.numberizer.domainlayer.DomainlayerContract
-import com.raywenderlich.numberizer.domainlayer.di.DomainlayerComponent
-import com.raywenderlich.numberizer.domainlayer.di.DomainlayerModule
-import com.raywenderlich.numberizer.domainlayer.domain.NumberFactRequest
-import com.raywenderlich.numberizer.domainlayer.domain.NumberFactResponse
-import com.raywenderlich.numberizer.domainlayer.usecase.FETCH_NUMBER_FACT_UC_TAG
-import com.raywenderlich.numberizer.presentationlayer.di.*
+import com.raywenderlich.numberizer.datalayer.di.DatasourceModule
+import com.raywenderlich.numberizer.datalayer.di.RepositoryModule
+import com.raywenderlich.numberizer.domainlayer.di.BridgeModule
+import com.raywenderlich.numberizer.domainlayer.di.UsecaseModule
+import com.raywenderlich.numberizer.presentationlayer.di.ApplicationScope
+import com.raywenderlich.numberizer.presentationlayer.di.MainComponent
+import com.raywenderlich.numberizer.presentationlayer.di.PresentationlayerModule
+import com.raywenderlich.numberizer.presentationlayer.di.SplashComponent
 import dagger.Component
 import dagger.Module
 import dagger.Provides
-import javax.inject.Named
 
 @ApplicationScope
 @Component(
-    modules = [UtilsModule::class, PresentationlayerModule::class, DomainlayerModule::class],
-    dependencies = [DatalayerComponent::class]
+    modules = [UtilsModule::class, PresentationlayerModule::class,
+    BridgeModule::class, UsecaseModule::class, RepositoryModule::class, DatasourceModule::class]
 )
 interface ApplicationComponent {
 
     @Component.Factory
     interface Factory {
-        fun create(modules: UtilsModule, datalayerComponent: DatalayerComponent): ApplicationComponent
+        fun create(modules: UtilsModule): ApplicationComponent
     }
 
     // downstream dependent components need data types to be exposed

@@ -34,9 +34,8 @@ import javax.inject.Named
 const val FETCH_NUMBER_FACT_UC_TAG = "fetchNumberFactUc"
 
 class FetchNumberFactUc @Inject constructor(
-//    @Named(DATA_REPOSITORY_TAG)
-//    private val numberDataRepository: DomainlayerContract.Data.DataRepository<NumberFactResponse>
-    private val numberDataRepository: DomainlayerContract.Data.DataRepository<NumberFactResponse>
+    @Named(DATA_REPOSITORY_TAG)
+    private val numberDataRepository: @JvmSuppressWildcards DomainlayerContract.Data.DataRepository<NumberFactResponse>
 ) : DomainlayerContract.Presentation.UseCase<NumberFactRequest, NumberFactResponse> {
 
     override suspend fun run(params: NumberFactRequest?): Either<Failure, NumberFactResponse> =

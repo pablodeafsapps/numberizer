@@ -22,7 +22,6 @@
 package com.raywenderlich.numberizer.base
 
 import android.app.Application
-import com.raywenderlich.numberizer.datalayer.di.DaggerDatalayerComponent
 import com.raywenderlich.numberizer.di.ApplicationComponent
 import com.raywenderlich.numberizer.di.DaggerApplicationComponent
 import com.raywenderlich.numberizer.di.UtilsModule
@@ -45,11 +44,7 @@ class BaseApplication : Application(), SplashComponentFactoryProvider, MainCompo
          'Context' instances), whereas 'dependencies' relate to other components which need external
          objects to build up their own modules.
          */
-        appComponent = DaggerApplicationComponent.factory().create(
-            modules = UtilsModule(ctx = this),
-//            domainlayerComponent = DaggerDomainlayerComponent.factory().create()
-//            datalayerComponent = DaggerDatalayerComponent.factory().create()
-        )
+        appComponent = DaggerApplicationComponent.factory().create(modules = UtilsModule(ctx = this))
     }
     
     override fun provideSplashComponentFactory(): SplashComponent.Factory =

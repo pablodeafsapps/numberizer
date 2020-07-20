@@ -45,9 +45,8 @@ interface MainDomainLayerBridge {
 }
 
 class MainDomainLayerBridgeImpl @Inject constructor(
-//    @Named(FETCH_NUMBER_FACT_UC_TAG)
-//    private val fetchNumberFactUc: DomainlayerContract.Presentation.UseCase<NumberFactRequest, NumberFactResponse>
-    private val fetchNumberFactUc: FetchNumberFactUc
+    @Named(FETCH_NUMBER_FACT_UC_TAG)
+    private val fetchNumberFactUc: @JvmSuppressWildcards DomainlayerContract.Presentation.UseCase<NumberFactRequest, NumberFactResponse>
 ) : MainDomainLayerBridge {
 
     override fun fetchNumberFact(

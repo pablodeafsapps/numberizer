@@ -17,7 +17,7 @@ buildscript {
         arrow_version = '0.10.1'
         retrofit_version = '2.6.1'
         okhttp_version = '4.2.1'
-        dagger_version = '2.27'
+        dagger_version = '2.28'
         // test
         junit_version = '4.13'
         androidxtestrunner_version = '1.1.2-rc01'
@@ -28,14 +28,10 @@ buildscript {
     repositories {
         google()
         jcenter()
-        maven {
-            url 'https://plugins.gradle.org/m2/'
-        }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$gradle_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "gradle.plugin.dev.arunkumar:scabbard-gradle-plugin:0.4.0"
     }
 }
 

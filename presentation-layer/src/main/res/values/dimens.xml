@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="text_large">18sp</dimen>
     <dimen name="default_margin">8dp</dimen>
+    <dimen name="extra_margin">16dp</dimen>
     <dimen name="fully_stretchable">0dp</dimen>
+    <dimen name="text_large">18sp</dimen>
 </resources>

@@ -25,6 +25,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.raywenderlich.numberizer.domainlayer.domain.Failure
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactResponse
 import com.raywenderlich.numberizer.presentationlayer.databinding.ActivityMainBinding
@@ -35,6 +36,8 @@ import com.raywenderlich.numberizer.presentationlayer.feature.main.MainContract
 import com.raywenderlich.numberizer.presentationlayer.feature.main.MainContract.Presenter.Companion.MAIN_PRESENTER_TAG
 import javax.inject.Inject
 import javax.inject.Named
+
+private const val EMPTY_STRING = ""
 
 class MainActivity : Activity(), MainContract.View {
 
@@ -60,10 +63,14 @@ class MainActivity : Activity(), MainContract.View {
     }
 
     override fun displayNumberFact(numberFact: NumberFactResponse) {
-        viewBinding.tvNumberFact.text = numberFact.fact
+        with(viewBinding) {
+            etNumber.setText(EMPTY_STRING)
+            tvNumberFact.text = numberFact.fact
+        }
     }
 
     override fun displayError(error: Failure) {
+        viewBinding.etNumber.setText(EMPTY_STRING)
         Toast.makeText(this, error.msg, Toast.LENGTH_SHORT).show()
     }
 

@@ -2,8 +2,6 @@ apply plugin: 'com.android.library'
 
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-// dagger graph visualizer
-apply plugin: 'scabbard.gradle'
 
 android {
     compileSdkVersion compilesdk_version
@@ -30,10 +28,6 @@ android {
     }
 }
 
-scabbard {
-    enabled true
-}
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -42,7 +36,7 @@ dependencies {
     implementation project(':domain-layer')
     // 3rd party libraries
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$coroutinesadapter_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
