@@ -21,23 +21,26 @@
  */
 package com.raywenderlich.numberizer.presentationlayer.feature.main.view.ui
 
+import android.R
 import android.app.Activity
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.raywenderlich.numberizer.domainlayer.domain.Failure
+import com.raywenderlich.numberizer.domainlayer.domain.NumberFactCategory
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactResponse
 import com.raywenderlich.numberizer.presentationlayer.databinding.ActivityMainBinding
 import com.raywenderlich.numberizer.presentationlayer.di.MainComponent
 import com.raywenderlich.numberizer.presentationlayer.di.MainComponentFactoryProvider
 import com.raywenderlich.numberizer.presentationlayer.di.MainModule
 import com.raywenderlich.numberizer.presentationlayer.feature.main.MainContract
-import com.raywenderlich.numberizer.presentationlayer.feature.main.MainContract.Presenter.Companion.MAIN_PRESENTER_TAG
+import com.raywenderlich.numberizer.presentationlayer.feature.main.presenter.MAIN_PRESENTER_TAG
 import javax.inject.Inject
 import javax.inject.Named
 
 private const val EMPTY_STRING = ""
+const val MAIN_VIEW_TAG = "mainView"
 
 class MainActivity : Activity(), MainContract.View {
 
@@ -56,8 +59,12 @@ class MainActivity : Activity(), MainContract.View {
 
     private fun initView() {
         with(viewBinding) {
+            spFactType.adapter = ArrayAdapter(this@MainActivity, R.layout.simple_spinner_item, NumberFactCategory.values())
             btnFetchFact.setOnClickListener {
-                presenter.onFetchFactSelected(data = etNumber.text.toString())
+                presenter.onFetchFactSelected(
+                    data = etNumber.text.toString(),
+                    category = NumberFactCategory.valueOf(spFactType.selectedItem.toString())
+                )
             }
         }
     }
@@ -79,7 +86,10 @@ class MainActivity : Activity(), MainContract.View {
     }
 
     override fun showLoading() {
-        viewBinding.pbLoading.visibility = View.VISIBLE
+        with (viewBinding) {
+            tvNumberFact.text = EMPTY_STRING
+            pbLoading.visibility = View.VISIBLE
+        }
     }
 
     override fun hideLoading() {

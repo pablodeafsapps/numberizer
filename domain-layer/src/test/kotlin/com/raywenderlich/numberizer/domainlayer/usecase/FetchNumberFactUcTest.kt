@@ -26,6 +26,7 @@ import arrow.core.right
 import com.nhaarman.mockitokotlin2.*
 import com.raywenderlich.numberizer.domainlayer.DomainlayerContract
 import com.raywenderlich.numberizer.domainlayer.domain.Failure
+import com.raywenderlich.numberizer.domainlayer.domain.NumberFactCategory
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactRequest
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -68,7 +69,7 @@ class FetchNumberFactUcTest {
     @Test
     fun `Given right parameters, when usecase is invoked -- 'NumberFactResponse' data is returned`() = runBlockingTest {
         // given
-        val rightParams = NumberFactRequest(number = DEFAULT_INTEGER_VALUE)
+        val rightParams = NumberFactRequest(number = DEFAULT_INTEGER_VALUE, category = NumberFactCategory.TRIVIA)
         whenever(mockRepository.fetchNumberFact(request = rightParams)).doReturn(getDummyNumberFactResponse().right())
         // when
         val response = usecase.run(params = rightParams)

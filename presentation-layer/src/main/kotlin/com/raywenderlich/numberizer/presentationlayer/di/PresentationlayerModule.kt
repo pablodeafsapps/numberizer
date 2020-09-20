@@ -1,14 +1,14 @@
 package com.raywenderlich.numberizer.presentationlayer.di
 
 import com.raywenderlich.numberizer.presentationlayer.feature.main.MainContract
-import com.raywenderlich.numberizer.presentationlayer.feature.main.MainContract.Presenter.Companion.MAIN_PRESENTER_TAG
-import com.raywenderlich.numberizer.presentationlayer.feature.main.MainContract.View.Companion.MAIN_VIEW_TAG
+import com.raywenderlich.numberizer.presentationlayer.feature.main.presenter.MAIN_PRESENTER_TAG
 import com.raywenderlich.numberizer.presentationlayer.feature.main.presenter.MainPresenter
+import com.raywenderlich.numberizer.presentationlayer.feature.main.view.ui.MAIN_VIEW_TAG
 import com.raywenderlich.numberizer.presentationlayer.feature.main.view.ui.MainActivity
 import com.raywenderlich.numberizer.presentationlayer.feature.splash.SplashContract
-import com.raywenderlich.numberizer.presentationlayer.feature.splash.SplashContract.Presenter.Companion.SPLASH_PRESENTER_TAG
-import com.raywenderlich.numberizer.presentationlayer.feature.splash.SplashContract.View.Companion.SPLASH_VIEW_TAG
+import com.raywenderlich.numberizer.presentationlayer.feature.splash.presenter.SPLASH_PRESENTER_TAG
 import com.raywenderlich.numberizer.presentationlayer.feature.splash.presenter.SplashPresenter
+import com.raywenderlich.numberizer.presentationlayer.feature.splash.view.ui.SPLASH_VIEW_TAG
 import com.raywenderlich.numberizer.presentationlayer.feature.splash.view.ui.SplashActivity
 import dagger.Module
 import dagger.Provides

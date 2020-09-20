@@ -26,6 +26,7 @@ import arrow.core.right
 import com.nhaarman.mockitokotlin2.*
 import com.raywenderlich.numberizer.domainlayer.DomainlayerContract
 import com.raywenderlich.numberizer.domainlayer.domain.Failure
+import com.raywenderlich.numberizer.domainlayer.domain.NumberFactCategory
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactRequest
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactResponse
 import com.raywenderlich.numberizer.presentationlayer.feature.main.MainContract
@@ -45,7 +46,7 @@ class MainPresenterTest {
     fun setUp() {
         mockView = mock()
         mockUsecase = mock()
-        mainPresenter = MainPresenter(view = mockView, usecase = mockUsecase)
+        mainPresenter = MainPresenter(view = mockView, fetchNumberFactUc = mockUsecase)
     }
 
     @After
@@ -57,7 +58,7 @@ class MainPresenterTest {
         // given
         val blankDdata = "   "
         // when
-        mainPresenter.onFetchFactSelected(data = blankDdata)
+        mainPresenter.onFetchFactSelected(data = blankDdata, category = NumberFactCategory.TRIVIA)
         // then
         verify(mockView).displayInputError(error = any())
     }
@@ -67,7 +68,7 @@ class MainPresenterTest {
         // given
         val noNumericData = "not a number"
         // when
-        mainPresenter.onFetchFactSelected(data = noNumericData)
+        mainPresenter.onFetchFactSelected(data = noNumericData, category = NumberFactCategory.TRIVIA)
         // then
         verify(mockView).displayInputError(error = any())
     }
@@ -79,7 +80,7 @@ class MainPresenterTest {
         val requestData = "3"
         val argumentCaptor = argumentCaptor<(Either<Failure, NumberFactResponse>) -> Unit>()
         // when
-        mainPresenter.onFetchFactSelected(data = requestData)
+        mainPresenter.onFetchFactSelected(data = requestData, category = NumberFactCategory.TRIVIA)
         verify(mockUsecase).invoke(scope = any(), params = any(), onResult = argumentCaptor.capture())
         argumentCaptor.firstValue.invoke(getDummyNumberFactResponse().right())
         // then
@@ -91,7 +92,7 @@ class MainPresenterTest {
         // given
         val requestData = "none"
         // when
-        mainPresenter.onFetchFactSelected(data = requestData)
+        mainPresenter.onFetchFactSelected(data = requestData, category = NumberFactCategory.TRIVIA)
         // then
         verify(mockView).displayInputError(error = any())
     }

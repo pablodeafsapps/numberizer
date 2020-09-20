@@ -39,7 +39,6 @@ object NumberDataRepository : DomainlayerContract.Data.DataRepository<NumberFact
     override suspend fun fetchNumberFact(request: NumberFactRequest): Either<Failure, NumberFactResponse> =
         try {
             val response = numberFactDataSource.fetchNumberFact(request = request)
-
             val body = response.body()
             body.takeIf { response.isSuccessful && it != null }?.let { f ->
                 NumberFactResponse(fact = f)

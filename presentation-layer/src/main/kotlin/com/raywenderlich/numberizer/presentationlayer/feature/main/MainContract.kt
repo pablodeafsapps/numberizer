@@ -22,6 +22,7 @@
 package com.raywenderlich.numberizer.presentationlayer.feature.main
 
 import com.raywenderlich.numberizer.domainlayer.domain.Failure
+import com.raywenderlich.numberizer.domainlayer.domain.NumberFactCategory
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactResponse
 import com.raywenderlich.numberizer.presentationlayer.base.MvpPresenter
 import com.raywenderlich.numberizer.presentationlayer.base.MvpView
@@ -29,11 +30,6 @@ import com.raywenderlich.numberizer.presentationlayer.base.MvpView
 interface MainContract {
 
     interface View : MvpView {
-
-        companion object {
-            const val MAIN_VIEW_TAG = "mainView"
-        }
-
         fun displayNumberFact(numberFact: NumberFactResponse)
         fun displayError(error: Failure)
         fun displayInputError(error: Failure)
@@ -42,12 +38,7 @@ interface MainContract {
     }
 
     interface Presenter : MvpPresenter<View> {
-
-        companion object {
-            const val MAIN_PRESENTER_TAG = "mainPresenter"
-        }
-
-        fun onFetchFactSelected(data: String)
+        fun onFetchFactSelected(data: String, category: NumberFactCategory)
     }
 
 }
