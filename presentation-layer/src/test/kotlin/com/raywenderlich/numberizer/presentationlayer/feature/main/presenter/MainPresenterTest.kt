@@ -23,10 +23,7 @@ package com.raywenderlich.numberizer.presentationlayer.feature.main.presenter
 
 import arrow.core.Either
 import arrow.core.right
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
 import com.raywenderlich.numberizer.domainlayer.DomainlayerContract
 import com.raywenderlich.numberizer.domainlayer.domain.Failure
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactCategory
@@ -49,7 +46,7 @@ class MainPresenterTest {
     fun setUp() {
         mockView = mock()
         mockUsecase = mock()
-        mainPresenter = MainPresenter(view = mockView)
+        mainPresenter = MainPresenter(view = mockView, fetchNumberFactUc = mockUsecase)
     }
 
     @After

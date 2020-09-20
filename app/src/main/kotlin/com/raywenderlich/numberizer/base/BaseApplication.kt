@@ -22,16 +22,34 @@
 package com.raywenderlich.numberizer.base
 
 import android.app.Application
+import com.raywenderlich.numberizer.di.ApplicationComponent
+import com.raywenderlich.numberizer.di.DaggerApplicationComponent
+import com.raywenderlich.numberizer.di.UtilsModule
+import com.raywenderlich.numberizer.presentationlayer.di.*
 
 /**
  * This class implements an [Application] subclass instance which serves as entry point to the app.
  * General tool configurations such as 'LeakCanary' for memory leaks, and 'Dagger' for dependency
  * inversion are initialized here.
  */
-class BaseApplication : Application() {
+class BaseApplication : Application(), SplashComponentFactoryProvider, MainComponentFactoryProvider {
+
+    private lateinit var appComponent: ApplicationComponent
 
     override fun onCreate() {
         super.onCreate()
+        /*
+         'ApplicationComponent' is created including all data every associated component needs.
+         Specifically, 'modules' parameters refer to those which demand external variables (mostly
+         'Context' instances).
+         */
+        appComponent = DaggerApplicationComponent.factory().create(modules = UtilsModule(ctx = this))
     }
+    
+    override fun provideSplashComponentFactory(): SplashComponent.Factory =
+        appComponent.splashComponentFactory()
+
+    override fun provideMainComponentFactory(): MainComponent.Factory =
+        appComponent.mainComponentFactory()
 
 }

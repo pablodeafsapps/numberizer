@@ -23,27 +23,43 @@ package com.raywenderlich.numberizer.presentationlayer.feature.splash.view.ui
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
+import com.raywenderlich.numberizer.presentationlayer.di.SplashComponent
+import com.raywenderlich.numberizer.presentationlayer.di.SplashComponentFactoryProvider
+import com.raywenderlich.numberizer.presentationlayer.di.SplashModule
 import com.raywenderlich.numberizer.presentationlayer.feature.main.view.ui.MainActivity
 import com.raywenderlich.numberizer.presentationlayer.feature.splash.SplashContract
-import com.raywenderlich.numberizer.presentationlayer.feature.splash.presenter.SplashPresenter
+import com.raywenderlich.numberizer.presentationlayer.feature.splash.presenter.SPLASH_PRESENTER_TAG
+import javax.inject.Inject
+import javax.inject.Named
 
 const val SPLASH_VIEW_TAG = "splashView"
 
 class SplashActivity : Activity(), SplashContract.View {
+    
+    @Inject
+    @Named(SPLASH_PRESENTER_TAG)
+    lateinit var presenter: SplashContract.Presenter
 
-    private val presenter: SplashContract.Presenter by lazy { SplashPresenter(view = this) }
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        getSplashComponent().inject(this)
+        super.onCreate(savedInstanceState)
+    }
+    
     override fun onResume() {
         super.onResume()
         presenter.onViewResumed()
     }
-
+    
     override fun navigateToMain() {
         startActivity(Intent(this, MainActivity::class.java))
     }
-
+    
     override fun finishView() {
         finish()
     }
-
+    
 }
+
+private fun SplashActivity.getSplashComponent(): SplashComponent =
+    (application as SplashComponentFactoryProvider).provideSplashComponentFactory().create(module = SplashModule(this))

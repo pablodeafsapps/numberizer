@@ -26,41 +26,45 @@ import com.raywenderlich.numberizer.domainlayer.domain.Failure
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactCategory
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactRequest
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactResponse
-import com.raywenderlich.numberizer.domainlayer.usecase.FetchNumberFactUc
+import com.raywenderlich.numberizer.domainlayer.usecase.FETCH_NUMBER_FACT_UC_TAG
 import com.raywenderlich.numberizer.presentationlayer.feature.main.MainContract
+import com.raywenderlich.numberizer.presentationlayer.feature.main.view.ui.MAIN_VIEW_TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import java.lang.NumberFormatException
+import javax.inject.Inject
+import javax.inject.Named
 import kotlin.coroutines.CoroutineContext
 
 const val MAIN_PRESENTER_TAG = "mainPresenter"
 
-class MainPresenter(private var view: MainContract.View?) : MainContract.Presenter {
+class MainPresenter @Inject constructor(
+    @Named(MAIN_VIEW_TAG) private val view: MainContract.View,
+    @Named(FETCH_NUMBER_FACT_UC_TAG) private val fetchNumberFactUc: @JvmSuppressWildcards DomainlayerContract.Presentation.UseCase<NumberFactRequest, NumberFactResponse>
+) : MainContract.Presenter {
 
     private val job = Job()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.IO
-    private val fetchNumberFactUc: DomainlayerContract.Presentation.UseCase<NumberFactRequest, NumberFactResponse> by lazy { FetchNumberFactUc() }
 
     override fun onAttach(mvpView: MainContract.View) {
         // no need to implement it since view injection is handled by Dagger
     }
 
     override fun onDetach() {
-        view = null
+        job.cancel()
     }
 
     override fun onFetchFactSelected(data: String, category: NumberFactCategory) {
         if (data.isNotBlank()) {
-            view?.showLoading()
+            view.showLoading()
             try {
                 val request = NumberFactRequest(number = data.toInt(), category = category)
                 fetchNumberFactUc.invoke(scope = this, params = request, onResult = {
-                    view?.hideLoading()
+                    view.hideLoading()
                     it.fold(::handleError, ::handleFetchNumberFactSuccess)
                 })
             } catch (e: NumberFormatException) {
-                view?.hideLoading()
+                view.hideLoading()
                 handleInputError(failure = Failure.InputParamsError("Parameter must be a number"))
             }
         } else {
@@ -69,15 +73,15 @@ class MainPresenter(private var view: MainContract.View?) : MainContract.Present
     }
 
     private fun handleFetchNumberFactSuccess(response: NumberFactResponse) {
-        view?.displayNumberFact(numberFact = response)
+        view.displayNumberFact(numberFact = response)
     }
 
     private fun handleError(failure: Failure) {
-        view?.displayError(error = failure)
+        view.displayError(error = failure)
     }
 
     private fun handleInputError(failure: Failure) {
-        view?.displayInputError(error = failure)
+        view.displayInputError(error = failure)
     }
 
 }
