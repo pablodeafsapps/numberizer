@@ -3,7 +3,6 @@ package com.raywenderlich.numberizer.di
 import android.content.Context
 import com.raywenderlich.numberizer.datalayer.di.DatasourceModule
 import com.raywenderlich.numberizer.datalayer.di.RepositoryModule
-import com.raywenderlich.numberizer.domainlayer.di.BridgeModule
 import com.raywenderlich.numberizer.domainlayer.di.UsecaseModule
 import com.raywenderlich.numberizer.presentationlayer.di.ApplicationScope
 import com.raywenderlich.numberizer.presentationlayer.di.MainComponent
@@ -15,8 +14,8 @@ import dagger.Provides
 
 @ApplicationScope
 @Component(
-    modules = [UtilsModule::class, PresentationlayerModule::class,
-    BridgeModule::class, UsecaseModule::class, RepositoryModule::class, DatasourceModule::class]
+    modules = [UtilsModule::class, PresentationlayerModule::class, UsecaseModule::class,
+        RepositoryModule::class, DatasourceModule::class]
 )
 interface ApplicationComponent {
 

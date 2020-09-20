@@ -24,29 +24,28 @@ package com.raywenderlich.numberizer.presentationlayer.feature.main.presenter
 import arrow.core.Either
 import arrow.core.right
 import com.nhaarman.mockitokotlin2.*
+import com.raywenderlich.numberizer.domainlayer.DomainlayerContract
 import com.raywenderlich.numberizer.domainlayer.domain.Failure
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactRequest
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactResponse
-import com.raywenderlich.numberizer.domainlayer.feature.main.MainDomainLayerBridge
 import com.raywenderlich.numberizer.presentationlayer.feature.main.MainContract
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-private const val DEFAULT_INTEGER_VALUE = -1
 private const val DEFAULT_STRING_VALUE = "none"
 
 class MainPresenterTest {
 
     private lateinit var mainPresenter: MainPresenter
     private lateinit var mockView: MainContract.View
-    private lateinit var mockBridge: MainDomainLayerBridge
+    private lateinit var mockUsecase: DomainlayerContract.Presentation.UseCase<NumberFactRequest, NumberFactResponse>
 
     @Before
     fun setUp() {
         mockView = mock()
-        mockBridge = mock()
-        mainPresenter = MainPresenter(view = mockView, bridge = mockBridge)
+        mockUsecase = mock()
+        mainPresenter = MainPresenter(view = mockView, usecase = mockUsecase)
     }
 
     @After
@@ -73,7 +72,7 @@ class MainPresenterTest {
         verify(mockView).displayInputError(error = any())
     }
 
-    // TODO: this test fails because the 'bridge' instance is not accessible, i.e. cannot be mocked/stubbed
+    // TODO: this test fails because the 'usecase' instance is not accessible, i.e. cannot be mocked/stubbed
     @Test
     fun `Given data, when 'onFetchFactSelected' is invoked -- 'displayNumberFact' is triggered`() {
         // given
@@ -81,7 +80,7 @@ class MainPresenterTest {
         val argumentCaptor = argumentCaptor<(Either<Failure, NumberFactResponse>) -> Unit>()
         // when
         mainPresenter.onFetchFactSelected(data = requestData)
-        verify(mockBridge).fetchNumberFact(scope = any(), params = any(), onResult = argumentCaptor.capture())
+        verify(mockUsecase).invoke(scope = any(), params = any(), onResult = argumentCaptor.capture())
         argumentCaptor.firstValue.invoke(getDummyNumberFactResponse().right())
         // then
         verify(mockView).displayNumberFact(numberFact = any())
