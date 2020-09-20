@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.mock
 import com.raywenderlich.numberizer.datalayer.datasource.NumberFactDataSource
 import com.raywenderlich.numberizer.domainlayer.DomainlayerContract
 import com.raywenderlich.numberizer.domainlayer.domain.Failure
+import com.raywenderlich.numberizer.domainlayer.domain.NumberFactCategory
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactRequest
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -57,7 +58,7 @@ class NumberDataRepositoryTest {
         }
 
     private fun getDummyNumberFactRequest() = NumberFactRequest(
-        number = DEFAULT_INTEGER_VALUE
+        number = DEFAULT_INTEGER_VALUE, category = NumberFactCategory.TRIVIA
     )
 
     private fun getDummyNumberFactResponse() = Response.success(DEFAULT_STRING_VALUE)

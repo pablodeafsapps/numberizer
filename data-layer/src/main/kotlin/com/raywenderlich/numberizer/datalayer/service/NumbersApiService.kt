@@ -26,7 +26,7 @@ import retrofit2.http.*
 
 interface NumbersApiService {
 
-    @GET("{number}/trivia")
-    suspend fun getNumberFactAsync(@Path("number") number: String): Response<String>
+    @GET("{number}/{category}")
+    suspend fun getNumberFactAsync(@Path("number") number: String, @Path("category") category: String): Response<String>
 
 }

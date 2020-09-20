@@ -23,20 +23,23 @@ package com.raywenderlich.numberizer.presentationlayer.feature.main.presenter
 
 import com.raywenderlich.numberizer.domainlayer.DomainlayerContract
 import com.raywenderlich.numberizer.domainlayer.domain.Failure
+import com.raywenderlich.numberizer.domainlayer.domain.NumberFactCategory
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactRequest
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactResponse
 import com.raywenderlich.numberizer.domainlayer.usecase.FETCH_NUMBER_FACT_UC_TAG
 import com.raywenderlich.numberizer.presentationlayer.feature.main.MainContract
-import com.raywenderlich.numberizer.presentationlayer.feature.main.MainContract.View.Companion.MAIN_VIEW_TAG
+import com.raywenderlich.numberizer.presentationlayer.feature.main.view.ui.MAIN_VIEW_TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import javax.inject.Inject
 import javax.inject.Named
 import kotlin.coroutines.CoroutineContext
 
+const val MAIN_PRESENTER_TAG = "mainPresenter"
+
 class MainPresenter @Inject constructor(
     @Named(MAIN_VIEW_TAG) private val view: MainContract.View,
-    @Named(FETCH_NUMBER_FACT_UC_TAG) private val usecase: @JvmSuppressWildcards DomainlayerContract.Presentation.UseCase<NumberFactRequest, NumberFactResponse>
+    @Named(FETCH_NUMBER_FACT_UC_TAG) private val fetchNumberFactUc: @JvmSuppressWildcards DomainlayerContract.Presentation.UseCase<NumberFactRequest, NumberFactResponse>
 ) : MainContract.Presenter {
 
     private val job = Job()
@@ -51,12 +54,12 @@ class MainPresenter @Inject constructor(
         job.cancel()
     }
 
-    override fun onFetchFactSelected(data: String) {
+    override fun onFetchFactSelected(data: String, category: NumberFactCategory) {
         if (data.isNotBlank()) {
             view.showLoading()
             try {
-                val request = NumberFactRequest(number = data.toInt())
-                usecase.invoke(scope = this, params = request, onResult = {
+                val request = NumberFactRequest(number = data.toInt(), category = category)
+                fetchNumberFactUc.invoke(scope = this, params = request, onResult = {
                     view.hideLoading()
                     it.fold(::handleError, ::handleFetchNumberFactSuccess)
                 })

@@ -29,9 +29,11 @@ import com.raywenderlich.numberizer.presentationlayer.di.SplashComponentFactoryP
 import com.raywenderlich.numberizer.presentationlayer.di.SplashModule
 import com.raywenderlich.numberizer.presentationlayer.feature.main.view.ui.MainActivity
 import com.raywenderlich.numberizer.presentationlayer.feature.splash.SplashContract
-import com.raywenderlich.numberizer.presentationlayer.feature.splash.SplashContract.Presenter.Companion.SPLASH_PRESENTER_TAG
+import com.raywenderlich.numberizer.presentationlayer.feature.splash.presenter.SPLASH_PRESENTER_TAG
 import javax.inject.Inject
 import javax.inject.Named
+
+const val SPLASH_VIEW_TAG = "splashView"
 
 class SplashActivity : Activity(), SplashContract.View {
     

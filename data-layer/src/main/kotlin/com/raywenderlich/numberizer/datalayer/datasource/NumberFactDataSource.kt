@@ -25,6 +25,7 @@ import com.raywenderlich.numberizer.datalayer.service.NumbersApiService
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactRequest
 import retrofit2.Response
 import retrofit2.Retrofit
+import java.util.*
 import javax.inject.Inject
 
 interface NumberFactDataSource {
@@ -43,6 +44,9 @@ class NumbersApiDataSource @Inject constructor(private val retrofit: Retrofit) :
 
     override suspend fun fetchNumberFact(request: NumberFactRequest): Response<String> =
         retrofit.create(NumbersApiService::class.java)
-            .getNumberFactAsync(number = request.number.toString())
+            .getNumberFactAsync(
+                number = request.number.toString(),
+                category = request.category.toString().toLowerCase(Locale.ROOT)
+            )
 
 }

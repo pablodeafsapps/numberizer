@@ -21,7 +21,9 @@
  */
 package com.raywenderlich.numberizer.domainlayer.domain
 
-data class NumberFactRequest(val number: Int)
+enum class NumberFactCategory { TRIVIA, MATH, DATE, YEAR }
+
+data class NumberFactRequest(val number: Int, val category: NumberFactCategory)
 
 data class NumberFactResponse(val fact: String)
 
