@@ -34,15 +34,14 @@ import com.raywenderlich.numberizer.presentationlayer.di.*
  */
 class BaseApplication : Application(), SplashComponentFactoryProvider, MainComponentFactoryProvider {
 
-    lateinit var appComponent: ApplicationComponent
+    private lateinit var appComponent: ApplicationComponent
 
     override fun onCreate() {
         super.onCreate()
         /*
          'ApplicationComponent' is created including all data every associated component needs.
          Specifically, 'modules' parameters refer to those which demand external variables (mostly
-         'Context' instances), whereas 'dependencies' relate to other components which need external
-         objects to build up their own modules.
+         'Context' instances).
          */
         appComponent = DaggerApplicationComponent.factory().create(modules = UtilsModule(ctx = this))
     }

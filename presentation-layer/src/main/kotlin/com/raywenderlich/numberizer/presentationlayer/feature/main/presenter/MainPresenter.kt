@@ -21,11 +21,11 @@
  */
 package com.raywenderlich.numberizer.presentationlayer.feature.main.presenter
 
+import com.raywenderlich.numberizer.domainlayer.DomainlayerContract
 import com.raywenderlich.numberizer.domainlayer.domain.Failure
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactRequest
 import com.raywenderlich.numberizer.domainlayer.domain.NumberFactResponse
-import com.raywenderlich.numberizer.domainlayer.feature.main.MAIN_DOMAIN_LAYER_BRIDGE_TAG
-import com.raywenderlich.numberizer.domainlayer.feature.main.MainDomainLayerBridge
+import com.raywenderlich.numberizer.domainlayer.usecase.FETCH_NUMBER_FACT_UC_TAG
 import com.raywenderlich.numberizer.presentationlayer.feature.main.MainContract
 import com.raywenderlich.numberizer.presentationlayer.feature.main.MainContract.View.Companion.MAIN_VIEW_TAG
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +36,7 @@ import kotlin.coroutines.CoroutineContext
 
 class MainPresenter @Inject constructor(
     @Named(MAIN_VIEW_TAG) private val view: MainContract.View,
-    @Named(MAIN_DOMAIN_LAYER_BRIDGE_TAG) private val bridge: MainDomainLayerBridge
+    @Named(FETCH_NUMBER_FACT_UC_TAG) private val usecase: @JvmSuppressWildcards DomainlayerContract.Presentation.UseCase<NumberFactRequest, NumberFactResponse>
 ) : MainContract.Presenter {
 
     private val job = Job()
@@ -56,7 +56,7 @@ class MainPresenter @Inject constructor(
             view.showLoading()
             try {
                 val request = NumberFactRequest(number = data.toInt())
-                bridge.fetchNumberFact(scope = this, params = request, onResult = {
+                usecase.invoke(scope = this, params = request, onResult = {
                     view.hideLoading()
                     it.fold(::handleError, ::handleFetchNumberFactSuccess)
                 })
